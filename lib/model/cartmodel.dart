@@ -1,11 +1,11 @@
 class CartModel {
-  final String image;
-  final String name;
-  final String brand;
-  final double originalPrice;
-  final double offerPrice;
-  final double discount;
-  int quantity;
+  final String image; // URL or asset path of the product image
+  final String name; // Name of the product
+  final String brand; // Brand of the product
+  final double originalPrice; // Original price before discount
+  final double offerPrice; // Price after applying the discount
+  final double discount; // Discount percentage applied
+  int quantity; // Quantity of the product in the cart
 
   CartModel({
     required this.image,
@@ -17,5 +17,6 @@ class CartModel {
     required this.quantity,
   });
 
+  // Calculates the total price for the selected quantity
   double get totalPrice => offerPrice * quantity;
 }

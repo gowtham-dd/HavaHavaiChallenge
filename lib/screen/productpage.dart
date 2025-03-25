@@ -13,18 +13,19 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  List products = [];
-  bool isLoading = false;
-  final String apiUrl = 'https://dummyjson.com/products';
+  List products = []; // Stores the list of products
+  bool isLoading = false; // Tracks loading state
+  final String apiUrl = 'https://dummyjson.com/products'; // API endpoint
 
   @override
   void initState() {
     super.initState();
-    fetchProducts();
+    fetchProducts(); // Fetch products when the page is initialized
   }
 
+  /// Fetches product data from the API and updates the UI.
   Future<void> fetchProducts() async {
-    if (isLoading) return;
+    if (isLoading) return; // Prevent multiple fetch calls
     setState(() => isLoading = true);
 
     try {
@@ -62,7 +63,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFE4E1),
+      backgroundColor: Color(0xFFFFE4E1), // Light pink background
       appBar: AppBar(
         backgroundColor: Color(0xFFFFE4E1),
         title: Text(
@@ -75,6 +76,7 @@ class _ProductPageState extends State<ProductPage> {
           IconButton(
             icon: Icon(Icons.shopping_cart, color: Colors.black),
             onPressed: () {
+              // Navigate to AddToCartPage when cart icon is clicked
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddToCartPage()),
@@ -84,21 +86,22 @@ class _ProductPageState extends State<ProductPage> {
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator()) // Show loader while fetching data
           : Padding(
               padding: EdgeInsets.all(8.0),
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: 2, // Two items per row
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: 0.75,
+                  childAspectRatio: 0.75, // Adjusting the aspect ratio for UI balance
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   return ProductTile(
                     product: products[index],
                     onAddToCart: () {
+                      // Add product to cart using Provider
                       Provider.of<CartProvider>(context, listen: false)
                           .addToCart(products[index]);
 

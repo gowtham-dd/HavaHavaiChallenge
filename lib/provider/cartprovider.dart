@@ -52,7 +52,6 @@ class CartProvider extends ChangeNotifier {
     });
   }
 
-  /// **New getter to calculate total items in the cart**
   int get totalItems {
     return _cart.fold<int>(0, (sum, item) => sum + (item['quantity'] as int));
   }

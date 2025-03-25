@@ -6,7 +6,7 @@ class AddToCartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFE4E1),
+      backgroundColor: Color(0xFFFFE4E1), // Light pink background
       appBar: AppBar(
         backgroundColor: Color(0xFFFFE4E1),
         title: Center(
@@ -16,12 +16,13 @@ class AddToCartPage extends StatelessWidget {
                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),
-        elevation: 0,
+        elevation: 0, // Remove shadow under the app bar
       ),
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
           return Column(
             children: [
+              // Cart Item List
               Expanded(
                 child: cartProvider.cart.isEmpty
                     ? Center(
@@ -42,12 +43,16 @@ class AddToCartPage extends StatelessWidget {
                           double offerPrice = double.tryParse(
                                   product['offerPrice'].toString()) ??
                               0.0;
-                          int discount = originalPrice > 0
-                              ? (((originalPrice - offerPrice) /
-                                          originalPrice) *
-                                      100)
-                                  .round()
-                              : 0;
+
+                          // Calculate discount percentage safely
+                          int discount = product.containsKey('offerPercentage')
+                              ? product['offerPercentage']
+                              : originalPrice > 0
+                                  ? (((originalPrice - offerPrice) /
+                                              originalPrice) *
+                                          100)
+                                      .round()
+                                  : 0;
 
                           return Card(
                             margin: EdgeInsets.symmetric(vertical: 6),
@@ -59,7 +64,7 @@ class AddToCartPage extends StatelessWidget {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  // Product Image
+                                  // Product Image with fallback in case of error
                                   Container(
                                     width: 140,
                                     height: 140,
@@ -72,6 +77,7 @@ class AddToCartPage extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: 15),
+
                                   // Product Details
                                   Expanded(
                                     child: Column(
@@ -124,14 +130,21 @@ class AddToCartPage extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+
                                   // Quantity Controls
                                   Row(
                                     children: [
                                       IconButton(
                                         icon: Icon(Icons.remove_circle,
                                             color: Colors.red, size: 28),
-                                        onPressed: () => cartProvider
-                                            .updateQuantity(index, -1),
+                                        onPressed: () {
+                                          if (product['quantity'] > 1) {
+                                            cartProvider.updateQuantity(
+                                                index, -1);
+                                          } else {
+                                            cartProvider.removeFromCart(index);
+                                          }
+                                        },
                                       ),
                                       Text(
                                         "${product['quantity']}",
@@ -154,6 +167,7 @@ class AddToCartPage extends StatelessWidget {
                         },
                       ),
               ),
+
               // Bottom Summary Container (Always Visible)
               Container(
                 padding: EdgeInsets.all(15),
@@ -197,16 +211,21 @@ class AddToCartPage extends StatelessWidget {
                         ),
                       ],
                     ),
+
                     // Buy Now Button with Item Count
                     SizedBox(
                       width: 180,
                       height: 60,
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Handle buy action
-                        },
+                        onPressed: cartProvider.totalItems == 0
+                            ? null
+                            : () {
+                                // Handle checkout action
+                              },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.pink,
+                          backgroundColor: cartProvider.totalItems == 0
+                              ? Colors.grey
+                              : Colors.pink,
                           padding: EdgeInsets.symmetric(
                               vertical: 15, horizontal: 15),
                           textStyle: TextStyle(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ProductTile extends StatelessWidget {
-  final Map<String, dynamic> product;
-  final VoidCallback onAddToCart;
+  final Map<String, dynamic> product; // Product details passed as a Map
+  final VoidCallback
+      onAddToCart; // Callback function when "Add to Cart" is clicked
 
   const ProductTile({
     Key? key,
@@ -13,27 +14,31 @@ class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
-      // Ensures tile height matches content
+      // Ensures tile height adjusts to content dynamically
       child: Card(
-        elevation: 3,
+        elevation: 3, // Adds shadow for a lifted effect
         margin: EdgeInsets.symmetric(
-            horizontal: 6, vertical: 4), // Less space between tiles
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            horizontal: 6, vertical: 4), // Minimal spacing between tiles
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5)), // Rounded corners
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min, // Important: Prevents extra space
+          mainAxisSize: MainAxisSize.min, // Prevents extra space
           children: [
             Stack(
               children: [
+                // Displays the product image with rounded corners
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
                   child: Image.network(
-                    product['thumbnail'],
+                    product['thumbnail'], // Product image URL
                     width: double.infinity,
                     height: 190,
-                    fit: BoxFit.cover,
+                    fit:
+                        BoxFit.cover, // Ensures image covers the space properly
                   ),
                 ),
+                // "Add to Cart" button positioned at the bottom right of the image
                 Positioned(
                   right: 8,
                   bottom: 8,
@@ -42,11 +47,11 @@ class ProductTile extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.white, // Button background color
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(2),
                       ),
-                      side: BorderSide(color: Colors.pink),
+                      side: BorderSide(color: Colors.pink), // Border color
                     ),
                     child: Text(
                       'ADD',
@@ -60,28 +65,31 @@ class ProductTile extends StatelessWidget {
                 ),
               ],
             ),
+            // Product details section
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 8, vertical: 4), // Reduced padding
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize:
-                    MainAxisSize.min, // Ensures content defines height
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Product title with bold text
                   Text(
                     product['title'],
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    overflow: TextOverflow.ellipsis,
+                    overflow:
+                        TextOverflow.ellipsis, // Ensures text doesn't overflow
                   ),
-                  SizedBox(height: 2), // Reduced space
+                  SizedBox(height: 2), // Reduced space between elements
+                  // Brand name in grey color
                   Text(
                     product['brand'],
                     style: TextStyle(fontSize: 13, color: Colors.grey),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4), // Reduced space
+                  SizedBox(height: 4),
                   Row(
                     children: [
+                      // Original price with strikethrough effect
                       Text(
                         '₹${product['originalPrice']}',
                         style: TextStyle(
@@ -91,6 +99,7 @@ class ProductTile extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 6),
+                      // Discounted price in bold
                       Text(
                         '₹${product['offerPrice']}',
                         style: TextStyle(
@@ -101,7 +110,8 @@ class ProductTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 2), // Reduced space
+                  SizedBox(height: 2),
+                  // Discount percentage in pink color
                   Text(
                     '${product['offerPercentage']}% OFF',
                     style: TextStyle(

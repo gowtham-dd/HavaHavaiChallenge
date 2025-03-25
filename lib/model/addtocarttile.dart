@@ -2,8 +2,9 @@ import 'package:cartproduct/model/cartmodel.dart';
 import 'package:flutter/material.dart';
 
 class AddToCartTile extends StatelessWidget {
-  final CartModel product;
-  final Function(int) onQuantityChanged;
+  final CartModel product; // Product data model
+  final Function(int)
+      onQuantityChanged; // Callback function for quantity changes
 
   const AddToCartTile({
     Key? key,
@@ -14,84 +15,89 @@ class AddToCartTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
-      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      elevation: 4, // Slight shadow for better UI depth
+      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Product Image inside a Container
             Container(
-              width: 100,
-              height: 100,
+              width: 90,
+              height: 90,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
                   image: NetworkImage(product.image),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.cover, // Ensures the image covers the container
                 ),
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 10),
 
             // Product Details inside a Column
             Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product Name
+                  Text(
+                    product.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      product.brand,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                    SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Text(
-                          '₹${product.originalPrice}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                            decoration: TextDecoration.lineThrough,
-                          ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1, // Prevents overflow for long names
+                  ),
+                  const SizedBox(height: 2),
+
+                  // Product Brand
+                  Text(
+                    product.brand,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
+                  const SizedBox(height: 6),
+
+                  // Price & Discount Row
+                  Row(
+                    children: [
+                      // Original Price (Strikethrough)
+                      Text(
+                        '₹${product.originalPrice}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
                         ),
-                        SizedBox(width: 6),
-                        Text(
-                          '₹${product.offerPrice}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                      ),
+                      const SizedBox(width: 6),
+
+                      // Offer Price
+                      Text(
+                        '₹${product.offerPrice}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
-                        SizedBox(width: 6),
-                        Text(
-                          '${product.discount}% OFF',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.pink,
-                          ),
+                      ),
+                      const SizedBox(width: 6),
+
+                      // Discount Percentage
+                      Text(
+                        '${product.discount}% OFF',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.pink,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
@@ -99,16 +105,24 @@ class AddToCartTile extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Decrease Quantity Button (Disabled if quantity is 1)
                 IconButton(
-                  icon: Icon(Icons.remove_circle, color: Colors.red),
-                  onPressed: () => onQuantityChanged(-1),
+                  icon: const Icon(Icons.remove_circle, color: Colors.red),
+                  onPressed: product.quantity > 1
+                      ? () => onQuantityChanged(-1)
+                      : null, // Disables button if quantity is 1
                 ),
+
+                // Quantity Display
                 Text(
                   '${product.quantity}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
+
+                // Increase Quantity Button
                 IconButton(
-                  icon: Icon(Icons.add_circle, color: Colors.green),
+                  icon: const Icon(Icons.add_circle, color: Colors.green),
                   onPressed: () => onQuantityChanged(1),
                 ),
               ],
